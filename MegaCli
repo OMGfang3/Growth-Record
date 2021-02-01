@@ -1,0 +1,120 @@
+和服务器打交道的同志们难免会接触到MegaCli阵列卡管理工具。
+
+MegaCli是针对阵列卡直接进行管理
+通常被用于作磁盘监控，比如监控第三方硬件中磁盘的健康度等
+
+#查看raid卡信息
+[root@localhost test]# /opt/MegaRAID/MegaCli/MegaCli64 -AdpAllInfo -aALL
+                                     
+Adapter #0
+
+==============================================================================
+                    Versions
+                ================
+Product Name    : PERC H310 Mini
+Serial No       : 44T01WF
+FW Package Build: 20.12.1-0002
+
+                    Mfg. Data
+                ================
+Mfg. Date       : 05/01/14
+Rework Date     : 05/01/14
+Revision No     : A06
+Battery FRU     : N/A
+
+                Image Versions in Flash:
+                ================
+BIOS Version       : 4.34.00_4.12.05.00_0x05260000
+Preboot CLI Version: 03.02-015:#%00008
+Ctrl-R Version     : 3.00-0022
+NVDATA Version     : 3.09.03-0038
+FW Version         : 2.120.14-2657
+Boot Block Version : 2.02.00.00-0001
+
+                Pending Images in Flash
+                ================
+可以看出我们的阵列卡名称是PERC H310 Mini，固件版本号为20.12.1-0002
+
+
+#查看物理磁盘信息
+[root@localhost test]# /opt/MegaRAID/MegaCli/MegaCli64 pdlist a0
+                                     
+Adapter #0
+
+Enclosure Device ID: 32   #设备id
+Slot Number: 0            #对应磁盘的物理位置（槽位位置）
+Enclosure position: 0
+Device Id: 0
+WWN: 5000C500660EBE9F
+Sequence Number: 2
+Media Error Count: 0      #磁盘物理错误
+Other Error Count: 2
+Predictive Failure Count: 0
+Last Predictive Failure Event Seq Number: 0
+PD Type: SATA
+Raw Size: 465.761 GB [0x3a386030 Sectors]      #磁盘容量
+Non Coerced Size: 465.261 GB [0x3a286030 Sectors]
+Coerced Size: 465.25 GB [0x3a280000 Sectors]
+Firmware state: JBOD                           #磁盘状态： JBOD直通模式
+Device Firmware Level: AA09
+Shield Counter: 0
+Successful diagnostics completion on :  N/A
+SAS Address(0): 0x4433221104000000
+Connected Port Number: 2(path0) 
+Inquiry Data:             9XF2RWEGST9500620NS                                 AA09
+FDE Enable: Disable
+Secured: Unsecured
+Locked: Unlocked
+Needs EKM Attention: No
+Foreign State: None 
+Device Speed: 3.0Gb/s 
+Link Speed: 3.0Gb/s 
+Media Type: Hard Disk Device
+Drive Temperature :32C (89.60 F)
+PI Eligibility:  No 
+Drive is formatted for PI information:  No
+PI: No PI
+Drive's write cache : Disabled
+Drive's NCQ setting : Disabled
+Port-0 :
+Port status: Active
+Port's Linkspeed: 3.0Gb/s 
+Drive has flagged a S.M.A.R.T alert : No
+
+#############################################################################################################################
+命令总结：
+
+#/opt/MegaCli  -LDInfo -Lall -aALL 【查raid级别】
+
+#/opt/MegaCli -AdpAllInfo -aALL 【查raid卡信息】
+
+#/opt/MegaCli -PDList -aALL     【查看硬盘信息】
+
+#/opt/MegaCli -AdpBbuCmd -aAll   【查看电池信息】
+
+#/opt/MegaCli -FwTermLog -Dsply -aALL  【查看raid卡日志】
+
+#/opt/MegaCli -adpCount 【显示适配器个数】
+
+#/opt/MegaCli -AdpGetTime –aALL 【显示适配器时间】
+
+#/opt/MegaCli -AdpAllInfo -aAll    【显示所有适配器信息】
+
+#/opt/MegaCli -LDInfo -LALL -aAll    【显示所有逻辑磁盘组信息】
+
+#/opt/MegaCli -PDList -aAll    【显示所有的物理信息】
+
+#/opt/MegaCli -AdpBbuCmd -GetBbuStatus -aALL |grep ‘Charger Status’ 【查看充电状态】
+
+#/opt/MegaCli -AdpBbuCmd -GetBbuStatus -aALL【显示BBU状态信息】
+
+#/opt/MegaCli -AdpBbuCmd -GetBbuCapacityInfo -aALL【显示BBU容量信息】
+
+#/opt/MegaCli -AdpBbuCmd -GetBbuDesignInfo -aALL    【显示BBU设计参数】
+
+#/opt/MegaCli -AdpBbuCmd -GetBbuProperties -aALL    【显示当前BBU属性】
+
+#/opt/MegaCli -cfgdsply -aALL    【显示Raid卡型号，Raid设置，Disk相关信息】
+
+
+部分内容参考https://www.jianshu.com/p/dcfd4bfba207
